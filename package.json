@@ -1,0 +1,15 @@
+{
+	"name": "ld31",
+	"version": "0.0.1",
+	"private": true,
+	"peerDependencies": {
+		"grunt-cli": "*"
+	},
+	"devDependencies": {
+		"grunt": "~0.4.1",
+		"matchdep": "~0.1.2",
+		"grunt-contrib-watch": "~0.5.1",
+		"grunt-contrib-concat": "~0.3.0",
+		"grunt-contrib-jshint": "~0.7.1"
+	}
+}

@@ -83,13 +83,36 @@ Crafty.scene("main", function () {
 		}
 	}
 
-	var player = Crafty.e('2D, Canvas, Player, player, Multiway')
+	g_game.player = Crafty.e('2D, Canvas, Player, player, Multiway')
 		.attr( { x: 80, y: 40, z: 100 } )
 		.multiway(1, {W: -90, S: 90, D: 0, A: 180})
 		.Player();
 
-	Crafty.e('2D, Canvas, tree')
-		.attr( { x: 200, y: 100, z: 100 } );
+	var mob = Crafty.e('2D, Canvas, NPC, orc')
+		.attr( { x: 180, y: 140, z: 100 } )
+		.NPC();
+	Crafty.e('2D, Canvas, NPC, orc')
+		.attr( { x: 280, y: 140, z: 100 } )
+		.NPC();
+
+	Crafty.e('2D, Canvas, bed, Collision')
+		.attr( { x: 280, y: 140, z: 100 } )
+		.collision();
+
+
+
+	Crafty.e("2D, Canvas, Text")
+		.attr({ x: g_defs.screen.width/8, y: g_defs.screen.height-54, z: 10000 })
+		.textFont({ size: '48px', family: "'Conv_ladybug px',Sans-Serif" })
+		.textColor('#ffffff')
+		.text('Nap Quest');
+
+	Crafty.e("2D, Canvas, Text")
+		.attr({ x: 3*g_defs.screen.width/4, y: g_defs.screen.height-32, z: 10000 })
+		.textFont({ size: '24px', family: "'Conv_ladybug px',Sans-Serif" })
+		.textColor('#ffffff')
+		.text('by Sanojian');
+
 });
 
 // fix for Webkit browsers too fast

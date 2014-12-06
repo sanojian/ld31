@@ -3,7 +3,6 @@
  */
 
 Crafty.c('MOB', {
-	direction: { x: 0, y: 0 },
 
 	MOB: function() {
 		this.requires("SpriteAnimation, Grid, Collision, Mouse")
@@ -30,6 +29,11 @@ Crafty.c('MOB', {
 					this.animate('Walk', -1);
 				}
 			})
+			.bind('EnterFrame', function(frameObj) {
+				if (this.lighter) {
+					this.lighter.attr({ x: this.x - this.lighter.radius + this.w / 2, y: this.y - this.lighter.radius + 7 * this.h / 8, z: this.z - 20 });
+				}
+			})
 			.bind('Moved', function(from) {
 				if (this.hit('impassible')) {
 					this.attr({ x: from.x, y: from.y });
@@ -38,30 +42,17 @@ Crafty.c('MOB', {
 					this.attr({ z: (this.y + this.h) * 10 + 5 });
 
 				}
-				//this.doMove(this.x - from.x, this.y - from.y);
 			});
 
+		this.direction = { x: 0, y: 0 };
 
 		return this;
 	},
-	doMove: function(dx, dy) {
-		if (this.direction.x == dx && this.direction.y == dy) {
+	addLighter: function(radius, color, bFlicker) {
+		if (this.lighter) {
 			return;
 		}
-		this.direction.x = dx;
-		this.direction.y = dy;
-		if (dx > 0) {
-			this.unflip();
-		}
-		else {
-			this.flip();
-		}
-		if (dx === 0 && dy === 0) {
-			this.pauseAnimation().resetAnimation();
-		}
-		else {
-			this.animate('Walk', -1);
-		}
+		this.lighter = Crafty.e('2D, Canvas, LightSource').LightSource(this, radius, color, bFlicker);
 	}
 
 });

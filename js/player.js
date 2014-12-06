@@ -14,10 +14,6 @@ Crafty.c('Player', {
 			.bind('EnterFrame', function(evt) {
 				this.frames = evt.frame;
 
-				this.lighter.attr({ x: this.x - this.lighter.radius + this.w/2, y: this.y - this.lighter.radius + 7*this.h/8, z: this.z - 20 });
-				//Crafty.viewport.x = VIEW_WIDTH/2 - this.x;
-				//Crafty.viewport.y = VIEW_HEIGHT/2 - this.y;
-
 				if (g_game.needRedrawDarkness) {
 					// darkness
 					var lights = Crafty('LightSource');
@@ -44,10 +40,18 @@ Crafty.c('Player', {
 					g_game.needRedrawDarkness = false;
 				}
 
+				var mobs = this.lighter.shadows.hit('NPC');
+				if (mobs) {
+					for (var m=0;m<mobs.length;m++) {
+						mobs[m].obj.addLighter(64, '256,128,128');
+					}
+				}
+
 			})
 			.MOB();
 
-		this.lighter = Crafty.e('2D, Canvas, LightSource').LightSource(this, 128, '255,255,128');
+		this.addLighter(96, '255,255,128');
+		//this.lighter = Crafty.e('2D, Canvas, LightSource').LightSource(this, 128, '255,255,128');
 
 		return this;
 	},

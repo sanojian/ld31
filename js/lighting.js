@@ -101,8 +101,8 @@ Crafty.c('LightSource', {
 			this.doFlicker();
 		}
 
-		var shadows = Crafty.e('2D, Canvas, Shadows').Shadows(this.source, radius);
-		this.attach(shadows);
+		this.shadows = Crafty.e('2D, Canvas, Shadows').Shadows(this.source, radius);
+		this.attach(this.shadows);
 
 		return this;
 	},

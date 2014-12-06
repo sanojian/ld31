@@ -38,8 +38,17 @@ var g_assetsObj = {
 			tile: 12,
 			tileh: 12,
 			map: { player: [0,0] }
+		},
+		'./assets/gfx/orc.png': {
+			tile: 12,
+			tileh: 12,
+			map: { orc: [0,0] }
+		},
+		'./assets/gfx/items.png': {
+			tile: 12,
+			tileh: 12,
+			map: { bed: [0,0] }
 		}
-
 	}
 };
 

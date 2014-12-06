@@ -28,7 +28,7 @@ function loadMap(strMap) {
 		}
 
 		g_game.map = data;
-		g_game.darknessLevel = 0.7;//data.properties.darkness;
+		g_game.darknessLevel = 0.9;//data.properties.darkness;
 
 		Crafty.scene("main"); //when everything is loaded, run the main scene
 

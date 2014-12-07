@@ -3,8 +3,7 @@
  */
 
 Crafty.c('NPC', {
-	mySpeed: 1,
-	//direction: { x: 0, y: 0},
+	//mySpeed: 0.5,
 
 	NPC: function() {
 		this.requires('MOB, Delay')
@@ -17,6 +16,8 @@ Crafty.c('NPC', {
 				}
 				if (this.lighter && (frameObj.frame + this.randomizer) % 100 === 0) {
 					// follow player
+					this.mySpeed = 1;
+
 					newDir = { x: 0, y: 0 };
 					var dx =  g_game.player.x - this.x;
 					var dy = g_game.player.y - this.y;
@@ -27,21 +28,24 @@ Crafty.c('NPC', {
 						newDir.y = Math.abs(dy)/dy;
 					}
 					this.trigger('NewDirection', newDir);
-					this.speak('I get you');
+					//this.speak('I get you');
+					var num = Math.floor(Math.random() * g_defs.speech[this.myType].length);
+					this.speak(g_defs.speech[this.myType][num]);
 				}
 				else if (!this.lighter && (frameObj.frame + this.randomizer) % 100 === 0) {
 					newDir = { x: 0, y: 0 };
 					newDir.x = -1 + Math.floor(Math.random() * 3);
 					newDir.y = -1 + Math.floor(Math.random() * 3);
 					this.trigger('NewDirection', newDir);
-					this.speak('Dis way now');
+					//this.speak('Dis way now');
 				}
 				if (this.hit('player')) {
 					if (g_game.player.jump && g_game.player.jump.h > 4) {
 						return;
 					}
 					else {
-						loseGame('The orc got you!');
+						var msg = Math.floor(Math.random() * g_defs.caught[this.myType].length);
+						loseGame(g_defs.caught[this.myType][msg]);
 					}
 				}
 			})
@@ -57,9 +61,27 @@ Crafty.c('NPC', {
 
 		this.attach(this.speech);
 
+		this.mySpeed = 0.5;
+
+		if (this.has('orc')) {
+			this.myType = 'orc';
+		}
+		else if (this.has('peasant')) {
+			this.myType = 'peasant';
+		}
+		else if (this.has('king')) {
+			this.myType = 'king';
+		}
+		else if (this.has('zombie')) {
+			this.myType = 'zombie';
+		}
+
 		return this;
 	},
 	speak: function(text) {
+		if (this.speech.text()) {
+			return; // already speaking
+		}
 		this.speech.text(text).attr({ x: this.x + this.w/2 - this.speech.w/2 });
 		this.delay(function() {
 			this.speech.text('');

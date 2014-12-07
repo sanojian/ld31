@@ -1,7 +1,8 @@
 
 var g_assetsObj = {
 	audio: {
-		//"beep": ["beep.wav", "beep.mp3", "beep.ogg"],
+		jump: ['./assets/sfx/jump.wav'],
+		click: ['./assets/sfx/click.wav']
 		//"boop": "boop.wav",
 		//"slash": "slash.wav"
 	},
@@ -17,15 +18,25 @@ var g_assetsObj = {
 			tileh: 12,
 			map: { orc: [0,0] }
 		},
+		'./assets/gfx/king.png': {
+			tile: 12,
+			tileh: 12,
+			map: { king: [0,0] }
+		},
+		'./assets/gfx/zombie.png': {
+			tile: 12,
+			tileh: 12,
+			map: { zombie: [0,0] }
+		},
 		'./assets/gfx/peasant.png': {
 			tile: 12,
 			tileh: 12,
 			map: { peasant: [0,0] }
 		},
 		'./assets/gfx/items.png': {
-			tile: 12,
-			tileh: 12,
-			map: { bed: [0,0] }
+			tile: 16,
+			tileh: 16,
+			map: { bed: [0,0], fire: [1, 0] }
 		}
 	}
 };

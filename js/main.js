@@ -66,7 +66,6 @@ Crafty.scene("main", function () {
 								if (g_game.specialTiles[id].type == 'trunk') {
 									el.collision(new Crafty.polygon([4, 25], [10, 25], [10, 30], [4, 30]));
 								}
-
 							}
 						}
 					}
@@ -77,7 +76,6 @@ Crafty.scene("main", function () {
 
 	g_game.player = Crafty.e('2D, Canvas, Player, player, Multiway')
 		.attr( { x: g_game.STARTX, y: g_game.STARTY, z: 100 } )
-		//.multiway(1, {W: -90, S: 90, D: 0, A: 180})
 		.multiway(1, {UP_ARROW: -90, DOWN_ARROW: 90, RIGHT_ARROW: 0, LEFT_ARROW: 180})
 		.Player();
 
@@ -95,9 +93,11 @@ Crafty.scene("main", function () {
 
 });
 
-function loseGame(message) {
+Crafty.scene("lose", function () {
+	Crafty.background("#000");
+
 	var text = Crafty.e("2D, Canvas, Text")
-		.text(message)
+		.text(g_game.message)
 		.textFont({ size: '48px', family: "'Conv_ladybug px',Sans-Serif" })
 		.attr({ x: g_defs.screen.width/2, y: g_defs.screen.height/2-64, z: 10000 })
 		.textColor('#ffffff');
@@ -117,8 +117,13 @@ function loseGame(message) {
 			});
 
 		text.attr({ x: g_defs.screen.width/2 - text.w/2 });
+	}, 2000);
 
-		Crafty.pause();
+});
 
-	}, 500);
+function loseGame(message) {
+
+	g_game.message = message;
+	Crafty.scene('lose');
+
 }

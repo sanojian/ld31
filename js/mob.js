@@ -52,6 +52,7 @@ Crafty.c('MOB', {
 		if (this.lighter) {
 			return;
 		}
+		Crafty.audio.play('click');
 		this.lighter = Crafty.e('2D, Canvas, LightSource').LightSource(this, radius, color, bFlicker);
 	}
 

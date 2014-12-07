@@ -118,7 +118,7 @@ Crafty.c('LightSource', {
 		this.trigger("Change");
 		//Crafty.DrawManager.drawAll({ _x: this.x, _y: this.y, _w: this.w, _h: this.h });
 		var self = this;
-		this.delay(function() { self.doFlicker(); }, 100 + 200 * Math.random());
+		this.delay(function() { self.doFlicker(); }, 100 + 400 * Math.random());
 	},
 
 	draw: function() {
@@ -138,33 +138,6 @@ Crafty.c('LightSource', {
 		ctx.arc(this.x + this.radius, this.y + this.radius, this.radius, 0, Math.PI*2, false);
 		ctx.closePath();
 		ctx.fill();
-
-		// ground illuminate
-		/*ctx.globalCompositeOperation = "lighter";
-		radgrad = ctx.createRadialGradient(this.x + this.radius, this.y + this.radius + 8, this.radius/16, this.x + this.radius, this.y + this.radius + 8, this.radius/6);
-		radgrad.addColorStop(0, 'rgba(' + this.color + ',' + (this.flicker/2).toFixed(2) + ')');
-		radgrad.addColorStop(1, 'rgba(' + this.color + ',0)');
-
-		ctx.fillStyle = radgrad;
-
-		var	cx = this.x + this.radius;
-		var cy = this.y + this.radius + 8;
-		var w = this.radius/2;
-		var h = this.radius/4;
-
-		ctx.beginPath();
-		ctx.moveTo(cx, cy - h/2); // A1
-		ctx.bezierCurveTo(
-				cx + w/2, cy - h/2, // C1
-				cx + w/2, cy + h/2, // C2
-			cx, cy + h/2); // A2
-
-		ctx.bezierCurveTo(
-				cx - w/2, cy + h/2, // C3
-				cx - w/2, cy - h/2, // C4
-			cx, cy - h/2); // A1
-		ctx.closePath();
-		ctx.fill();*/
 
 		// back to default
 		Crafty.canvas.context.globalCompositeOperation = "source-over";

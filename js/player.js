@@ -14,6 +14,7 @@ Crafty.c('Player', {
 			.bind('KeyDown', function(evt) {
 				if (evt.key == 32 && !this.jump) {
 					this.disableControl();
+					Crafty.audio.play('jump');
 					this.jump = {
 						origY: this.y,
 						h: 0,
@@ -23,6 +24,12 @@ Crafty.c('Player', {
 			})
 			.bind('EnterFrame', function(evt) {
 				this.frames = evt.frame;
+
+				// check world bounds
+				if (this.x < 0 || this.x > g_defs.screen.width || this.y < 0 || this.y > g_defs.screen.height) {
+					loseGame('No adventures!  Go to bed.');
+					return;
+				}
 
 				if (this.jump) {
 					this.jump.h += this.jump.vY;
@@ -69,6 +76,11 @@ Crafty.c('Player', {
 					for (var m=0;m<mobs.length;m++) {
 						mobs[m].obj.addLighter(64, '256,128,128');
 					}
+				}
+
+				var win = this.hit('Bed');
+				if (win) {
+					loseGame('Naptime!  You win!');
 				}
 
 			})

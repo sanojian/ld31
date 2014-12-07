@@ -80,7 +80,7 @@ Crafty.c('Player', {
 
 				var win = this.hit('Bed');
 				if (win) {
-					loseGame('Naptime!  You win!');
+					winGame('Naptime!  You win!');
 				}
 
 			})

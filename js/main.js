@@ -91,6 +91,7 @@ Crafty.scene("main", function () {
 		.textColor('#ffffff')
 		.text('by Sanojian');
 
+	playMusic('song_1');
 });
 
 Crafty.scene("lose", function () {
@@ -121,9 +122,22 @@ Crafty.scene("lose", function () {
 
 });
 
-function loseGame(message) {
+function playMusic(songName) {
+	Crafty.audio.stop();
 
+	Crafty.audio.play(songName, -1);
+}
+
+function winGame(message) {
+
+	playMusic('song_win');
 	g_game.message = message;
 	Crafty.scene('lose');
+}
 
+function loseGame(message) {
+
+	playMusic('song_lose');
+	g_game.message = message;
+	Crafty.scene('lose');
 }

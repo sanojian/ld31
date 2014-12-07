@@ -125,7 +125,7 @@ Crafty.scene("lose", function () {
 function playMusic(songName) {
 	Crafty.audio.stop();
 
-	Crafty.audio.play(songName, -1);
+	Crafty.audio.play(songName, 25);
 }
 
 function winGame(message) {

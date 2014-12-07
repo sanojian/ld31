@@ -39,7 +39,7 @@ Crafty.c('MOB', {
 					this.attr({ x: from.x, y: from.y });
 				}
 				else {
-					this.attr({ z: (this.y + this.h) * 10 + 5 });
+					this.attr({ z: Math.floor((this.y + this.h) * 10 + 5) });
 
 				}
 			});

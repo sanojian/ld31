@@ -14,19 +14,23 @@ Crafty.c('NPC', {
 					this.attr( { x: this.x + this.direction.x * this.mySpeed, y: this.y + this.direction.y * this.mySpeed } );
 					this.trigger('Moved', from);
 				}
-				if (this.lighter && (frameObj.frame + this.randomizer) % 100 === 0) {
+				if (this.lighter && (frameObj.frame + this.randomizer) % 40 === 0) {
 					// follow player
 					this.mySpeed = 1;
 
 					newDir = { x: 0, y: 0 };
 					var dx =  g_game.player.x - this.x;
 					var dy = g_game.player.y - this.y;
-					if (dx !== 0) {
+					var angle = Math.atan2(dy, dx);
+					newDir.y = 1 * Math.sin(angle);
+					newDir.x = 1 * Math.cos(angle);
+
+					/*if (dx !== 0) {
 						newDir.x = Math.abs(dx)/dx;
 					}
 					if (dy !== 0) {
 						newDir.y = Math.abs(dy)/dy;
-					}
+					}*/
 					this.trigger('NewDirection', newDir);
 					//this.speak('I get you');
 					var num = Math.floor(Math.random() * g_defs.speech[this.myType].length);

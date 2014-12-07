@@ -11,11 +11,35 @@ Crafty.c('Player', {
 			.bind('Move', function() {
 				//g_game.mapHandler.changeLoc(this.x, this.y);
 			})
+			.bind('KeyDown', function(evt) {
+				if (evt.key == 32 && !this.jump) {
+					this.disableControl();
+					this.jump = {
+						origY: this.y,
+						h: 0,
+						vY: g_game.JUMPVY
+					};
+				}
+			})
 			.bind('EnterFrame', function(evt) {
 				this.frames = evt.frame;
 
+				if (this.jump) {
+					this.jump.h += this.jump.vY;
+					this.jump.vY += g_game.GRAVITY;
+					if (this.jump.h <= 0) {
+						this.y = this.jump.origY;
+						this.jump = null;
+					}
+					else {
+						this.y = this.jump.origY - this.jump.h;
+						this.enableControl();
+					}
+					this.trigger('Moved', { x: this.x, y: this.y });
+				}
+
 				if (g_game.needRedrawDarkness) {
-					// darkness
+					// darkness for the world
 					var lights = Crafty('LightSource');
 					var ctxDark = g_game.darkCanvas.getContext('2d');
 					ctxDark.globalCompositeOperation = "source-over";

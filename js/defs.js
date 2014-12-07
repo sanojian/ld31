@@ -2,7 +2,7 @@ var g_defs = {
 	scale: 4,
 	screen: {
 		width: 1024,
-		height: 640
+		height: 768
 	},
 	teams: {
 		team0: { color: '#9D9D9D' },

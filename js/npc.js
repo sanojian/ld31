@@ -3,7 +3,7 @@
  */
 
 Crafty.c('NPC', {
-	mySpeed: 0.5,
+	mySpeed: 1,
 	//direction: { x: 0, y: 0},
 
 	NPC: function() {
@@ -15,7 +15,7 @@ Crafty.c('NPC', {
 					this.attr( { x: this.x + this.direction.x * this.mySpeed, y: this.y + this.direction.y * this.mySpeed } );
 					this.trigger('Moved', from);
 				}
-				if (this.lighter && frameObj.frame % 100 === 0) {
+				if (this.lighter && (frameObj.frame + this.randomizer) % 100 === 0) {
 					// follow player
 					newDir = { x: 0, y: 0 };
 					var dx =  g_game.player.x - this.x;
@@ -29,18 +29,25 @@ Crafty.c('NPC', {
 					this.trigger('NewDirection', newDir);
 					this.speak('I get you');
 				}
-				else if (!this.lighter && frameObj.frame % 100 === 0) {
+				else if (!this.lighter && (frameObj.frame + this.randomizer) % 100 === 0) {
 					newDir = { x: 0, y: 0 };
 					newDir.x = -1 + Math.floor(Math.random() * 3);
 					newDir.y = -1 + Math.floor(Math.random() * 3);
 					this.trigger('NewDirection', newDir);
 					this.speak('Dis way now');
 				}
+				if (this.hit('player')) {
+					if (g_game.player.jump && g_game.player.jump.h > 4) {
+						return;
+					}
+					else {
+						loseGame('The orc got you!');
+					}
+				}
 			})
-			//.bind("NewDirection", function (newDirection) {
-			//	this.direction = newDirection;
-			//})
 			.MOB();
+
+		this.randomizer = Math.floor(Math.random()*20) - 10;
 
 		this.speech = Crafty.e("2D, Canvas, Text")
 			.attr({ x: this.x + this.w/2, y: this.y - this.h, z: 10000 })

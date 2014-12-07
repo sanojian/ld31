@@ -5,6 +5,7 @@
 function loadMap(strMap) {
 
 	g_game.specialTiles = {};
+	g_game.mobTiles = {};
 
 	$.getJSON('./assets/maps/' + strMap + '.json?' + Math.random(), function(data) {
 
@@ -17,8 +18,12 @@ function loadMap(strMap) {
 				for (var x=0;x<width;x++) {
 					var id = data.tilesets[i].firstgid + y*width+x;
 					myMap['maptile_' + id] = [x*data.tilesets[i].tilewidth, y*data.tilesets[i].tileheight, data.tilesets[i].tilewidth, data.tilesets[i].tileheight];
-					if (data.tilesets[i].name == 'trunk' || data.tilesets[i].name == 'rock') {
+					if (data.tilesets[i].name == 'trunk') {
 						g_game.specialTiles[id] = { type: data.tilesets[i].name };
+					}
+					else {
+						// any image can be a mob
+						g_game.mobTiles[id] = { type: data.tilesets[i].name };
 					}
 				}
 			}

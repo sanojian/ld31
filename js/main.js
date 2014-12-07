@@ -1,31 +1,14 @@
-/*var GameState = function(game) {
+var g_game = {
+	GRAVITY: -0.1,
+	JUMPVY: 2,
+	STARTX: 20,
+	STARTY: 60
 };
-
-
-// Load images and sounds
-GameState.prototype.preload = function() {
-};
-
-GameState.prototype.create = function() {
-
-	this.game.stage.backgroundColor = 0x44cc88;
-
-};
-
-GameState.prototype.update = function() {
-
-};*/
-
-var g_game = {};
 
 window.onload = function() {
 
-	//doPreload();
-
-
 
 	Crafty.init(g_defs.screen.width, g_defs.screen.height);
-	//doCraftyInitialization();
 
 	// darkener
 	var pos = jQuery("#cr-stage").position();
@@ -50,32 +33,41 @@ Crafty.scene("main", function () {
 
 	// draw map
 	for (var i = 0; i < data.layers.length; i++) {
-		for (var y = 0; y < data.layers[i].height; y++) {
-			for (var x = 0; x < data.layers[i].width; x++) {
-				var id = data.layers[i].data[x + y * data.layers[i].width];
-				if (id) {
+		if (data.layers[i].type == 'objectgroup') {
+			for (var o=0; o<data.layers[i].objects.length; o++) {
+				var obj = data.layers[i].objects[o];
+				var mob = Crafty.e('2D, Canvas, ' + obj.type + ', ' + g_game.mobTiles[obj.gid].type)
+					.attr( { x: obj.x, y: obj.y, z: 100 } );
+				mob[obj.type]();
+			}
+		}
+		else if (data.layers[i].type == 'tilelayer') {
+			for (var y = 0; y < data.layers[i].height; y++) {
+				for (var x = 0; x < data.layers[i].width; x++) {
+					var id = data.layers[i].data[x + y * data.layers[i].width];
+					if (id) {
 
-					var el = Crafty.e('2D, Canvas, maptile_' + id +
-						(data.layers[i].properties && data.layers[i].properties.classes ? ',' + data.layers[i].properties.classes : ''))
-						.attr({ x: x * data.tilewidth, y: y * data.tilewidth });
+						var el = Crafty.e('2D, Canvas, maptile_' + id +
+							(data.layers[i].properties && data.layers[i].properties.classes ? ',' + data.layers[i].properties.classes : ''))
+							.attr({ x: x * data.tilewidth, y: y * data.tilewidth });
 
-					// adjust for taller items
-					el.attr({ y: el.y - el.h + data.tileheight });
+						// adjust for taller items
+						el.attr({ y: el.y - el.h + data.tileheight });
 
-					// height above ground
-					var z = data.layers[i].properties.zVal;
-					z = z.replace(/y/g, el.y).replace(/h/g, el.h);
-					eval('z = ' + z);
-					el.attr( { z: Math.floor(z) });
+						// height above ground
+						var z = data.layers[i].properties.zVal;
+						z = z.replace(/y/g, el.y).replace(/h/g, el.h);
+						eval('z = ' + z);
+						el.attr({ z: Math.floor(z) });
 
-					if (data.layers[i].properties && data.layers[i].properties.classes && data.layers[i].properties.classes.indexOf('solid') != -1) {
-						el.addComponent('Collision');
-						if (g_game.specialTiles[id]) {
-							if (g_game.specialTiles[id].type == 'trunk') {
-								el.collision(new Crafty.polygon([4, 25], [10, 25], [10, 30], [4, 30]));
-								//el.attr({ z: el.z - 240 });
+						if (data.layers[i].properties && data.layers[i].properties.classes && data.layers[i].properties.classes.indexOf('solid') != -1) {
+							el.addComponent('Collision');
+							if (g_game.specialTiles[id]) {
+								if (g_game.specialTiles[id].type == 'trunk') {
+									el.collision(new Crafty.polygon([4, 25], [10, 25], [10, 30], [4, 30]));
+								}
+
 							}
-
 						}
 					}
 				}
@@ -84,22 +76,10 @@ Crafty.scene("main", function () {
 	}
 
 	g_game.player = Crafty.e('2D, Canvas, Player, player, Multiway')
-		.attr( { x: 80, y: 40, z: 100 } )
-		.multiway(1, {W: -90, S: 90, D: 0, A: 180})
+		.attr( { x: g_game.STARTX, y: g_game.STARTY, z: 100 } )
+		//.multiway(1, {W: -90, S: 90, D: 0, A: 180})
+		.multiway(1, {UP_ARROW: -90, DOWN_ARROW: 90, RIGHT_ARROW: 0, LEFT_ARROW: 180})
 		.Player();
-
-	var mob = Crafty.e('2D, Canvas, NPC, orc')
-		.attr( { x: 180, y: 140, z: 100 } )
-		.NPC();
-	Crafty.e('2D, Canvas, NPC, orc')
-		.attr( { x: 280, y: 140, z: 100 } )
-		.NPC();
-
-	Crafty.e('2D, Canvas, bed, Collision')
-		.attr( { x: 280, y: 140, z: 100 } )
-		.collision();
-
-
 
 	Crafty.e("2D, Canvas, Text")
 		.attr({ x: g_defs.screen.width/8, y: g_defs.screen.height-54, z: 10000 })
@@ -115,17 +95,30 @@ Crafty.scene("main", function () {
 
 });
 
-// fix for Webkit browsers too fast
-jQuery.fn.aPosition = function() {
-	var thisLeft = this.offset().left;
-	var thisTop = this.offset().top;
-	var thisParent = this.parent();
+function loseGame(message) {
+	var text = Crafty.e("2D, Canvas, Text")
+		.text(message)
+		.textFont({ size: '48px', family: "'Conv_ladybug px',Sans-Serif" })
+		.attr({ x: g_defs.screen.width/2, y: g_defs.screen.height/2-64, z: 10000 })
+		.textColor('#ffffff');
 
-	var parentLeft = thisParent.offset().left;
-	var parentTop = thisParent.offset().top;
+	text.attr({ x: g_defs.screen.width/2 - text.w/2 });
 
-	return {
-		left: thisLeft-parentLeft,
-		top: thisTop-parentTop
-	};
-};
+	setTimeout(function() {
+		text = Crafty.e("2D, Canvas, Text, Keyboard")
+			.text('Press space to try again.')
+			.textFont({ size: '24px', family: "'Conv_ladybug px',Sans-Serif" })
+			.attr({ x: g_defs.screen.width/2, y: g_defs.screen.height/2+64, z: 10000 })
+			.textColor('#ffffff')
+			.bind('KeyDown', function(evt) {
+				if (evt.key == 32) {
+					Crafty.scene('main');
+				}
+			});
+
+		text.attr({ x: g_defs.screen.width/2 - text.w/2 });
+
+		Crafty.pause();
+
+	}, 500);
+}

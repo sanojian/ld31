@@ -676,9 +676,9 @@ var g_assetsObj = {
 	audio: {
 		jump: ['./assets/sfx/jump.wav'],
 		click: ['./assets/sfx/click.wav'],
-		song_win: ['./assets/music/chill.ogg'],
-		song_lose: ['./assets/music/lose.ogg'],
-		song_1: ['./assets/music/happy_stroll.ogg']
+		song_win: ['https://dl.dropboxusercontent.com/u/102070389/ld31/chill.OGG'],
+		song_lose: ['https://dl.dropboxusercontent.com/u/102070389/ld31/lose.OGG'],
+		song_1: ['https://dl.dropboxusercontent.com/u/102070389/ld31/happy_stroll.OGG']
 		//"boop": "boop.wav",
 		//"slash": "slash.wav"
 	},
